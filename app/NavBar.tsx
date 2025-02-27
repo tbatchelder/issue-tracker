@@ -1,11 +1,11 @@
 // The usepathname is dependent on browser APIs.  We want to access this thru the client so we need to add:
 "use client";
 
-import Link from "next/link";
 import React from "react";
 import { usePathname } from "next/navigation";
 import { GiUnicorn } from "react-icons/gi";
 import classNames from "classnames";
+import Link from "next/link";
 
 const NavBar = () => {
   const currentPath = usePathname();
