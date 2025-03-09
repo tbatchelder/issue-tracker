@@ -3,8 +3,10 @@ import { z } from "zod";
 import prisma from "@/prisma/client";
 
 const createIssueSchema = z.object({
-  title: z.string().min(1).max(255),
-  description: z.string().min(1),
+  // title: z.string().min(1).max(255),     Orginal - below is added to customize the error message
+  title: z.string().min(1, "Title is required.").max(255),
+  // description: z.string().min(1),        Same here
+  description: z.string().min(1, "Description is required."),
 });
 
 export async function POST(request: NextRequest) {
@@ -13,7 +15,8 @@ export async function POST(request: NextRequest) {
 
   // Check that the validation is good
   if (!validation.success)
-    return NextResponse.json(validation.error.errors, { status: 400 }); // 400 = Bad Request
+    // return NextResponse.json(validation.error.errors, { status: 400 }); // 400 = Bad Request
+    return NextResponse.json(validation.error.format(), { status: 400 }); // format gives the same error as above but more formatted
 
   const newIssue = await prisma.issue.create({
     data: { title: body.title, description: body.description },
